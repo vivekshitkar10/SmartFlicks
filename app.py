@@ -2,6 +2,11 @@ import streamlit as st
 import pickle
 import requests
 
+url = "https://1drv.ms/u/c/26207af602db14ac/EdO-MNhKTQlNhNX88O6rAaAB-KHjIqKcL3e4YFytECVAfg?e=QkP3iy"
+r = requests.get(url)
+with open("similarity.pkl", "wb") as f:
+    f.write(r.content)
+
 # Page branding
 st.set_page_config(
     page_title="SmartFlicks 🎥",         # 🔤 Name shown on browser tab
