@@ -1,17 +1,17 @@
 import streamlit as st
 import pickle
-import requests
-import gdown
+import gdown  # Use gdown for downloading large files from Google Drive
 
-# File ID from Google Drive
-file_id = '1xLmlmFLb4Do-R77Twyk-tt4o3LAru7YJ'  # Replace with your actual ID
-file_name = 'similarity.pickle'
+# File ID from Google Drive (Your shared file link ID)
+file_id = '1xLmlmFLb4Do-R77Twyk-tt4o3LAru7YJ'
+file_name = 'similarity.pkl'  # Name for the file that will be downloaded
+
+# Construct the download URL for Google Drive
 url = f'https://drive.google.com/uc?id={file_id}'
 
-url = "https://1drv.ms/u/c/26207af602db14ac/EdO-MNhKTQlNhNX88O6rAaAB-KHjIqKcL3e4YFytECVAfg?e=QkP3iy"
-r = requests.get(url)
-with open("similarity.pkl", "wb") as f:
-    f.write(r.content)
+# Download the file only if it is not already present
+if not os.path.exists(file_name):
+    gdown.download(url, file_name, quiet=False)
 
 # Page branding
 st.set_page_config(
@@ -47,14 +47,16 @@ def recommend(movie):
     return recommended_movies, recommended_movie_poster
 
 
-# Load full DataFrame
+# Load full DataFrame (this is another large file you need to handle the same way)
 movies_dict = pickle.load(open('movies.pkl', 'rb'))
 
 # Pass only titles to the selectbox
 movie_titles = movies_dict['title'].values
 
+# Load the similarity pickle file
 similarity = pickle.load(open('similarity.pkl', 'rb'))
 
+# Movie selection
 Selected_Movie_name = st.selectbox(
     "🍿 Pick a Movie",
     movie_titles)
@@ -65,32 +67,13 @@ if st.button("Recommend"):
     st.write("🎬 Here are your Recommendations :")
     names, posters = recommend(Selected_Movie_name)
 
-    # We can use loops as well
-    cols = st.columns(5)  # Create 5 columns once
+    # Create 5 columns to show recommended movies
+    cols = st.columns(5)
     for idx, col in enumerate(cols):
         with col:
-            # Centered Movie Title using HTML and styling
             col.markdown(f"""
                 <div style="display: flex; flex-direction: column; align-items: center;">
                     <img src="{posters[idx]}" style="height: 220px; object-fit: cover; border-radius: 5px;"/>
                     <p style="text-align: center; font-weight: ; margin-top: 10px;">{names[idx]}</p>
                 </div>
                 """, unsafe_allow_html=True)
-
-    # Without Looping
-    # col1,col2,col3,col4,col5 = st.columns(5)
-    # with col1:
-    #     st.text(names[0])
-    #     st.image(posters[0])
-    # with col2:
-    #     st.text(names[1])
-    #     st.image(posters[1])
-    # with col3:
-    #     st.text(names[2])
-    #     st.image(posters[2])
-    # with col4:
-    #     st.text(names[3])
-    #     st.image(posters[3])
-    # with col5:
-    #     st.text(names[4])
-    #     st.image(posters[4])
