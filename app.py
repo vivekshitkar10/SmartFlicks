@@ -1,6 +1,12 @@
 import streamlit as st
 import pickle
 import requests
+import gdown
+
+# File ID from Google Drive
+file_id = '1xLmlmFLb4Do-R77Twyk-tt4o3LAru7YJ'  # Replace with your actual ID
+file_name = 'similarity.pickle'
+url = f'https://drive.google.com/uc?id={file_id}'
 
 url = "https://1drv.ms/u/c/26207af602db14ac/EdO-MNhKTQlNhNX88O6rAaAB-KHjIqKcL3e4YFytECVAfg?e=QkP3iy"
 r = requests.get(url)
