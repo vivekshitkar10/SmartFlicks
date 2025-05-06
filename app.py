@@ -1,7 +1,7 @@
 import os
 import streamlit as st
 import pickle
-import gdown  # Use gdown for downloading large files from Google Drive
+import gdown
 
 # File ID from Google Drive (Your shared file link ID)
 file_id = '1xLmlmFLb4Do-R77Twyk-tt4o3LAru7YJ'
@@ -13,6 +13,15 @@ url = f'https://drive.google.com/uc?id={file_id}'
 # Download the file only if it is not already present
 if not os.path.exists(file_name):
     gdown.download(url, file_name, quiet=False)
+
+# Check if the downloaded file is indeed a pickle file
+try:
+    with open(file_name, 'rb') as f:
+        similarity = pickle.load(f)
+    st.write("Successfully loaded similarity.pkl!")
+except Exception as e:
+    st.write(f"Error loading similarity.pkl: {str(e)}")
+    st.write("Please check the file format or try downloading it again.")
 
 # Page branding
 st.set_page_config(
@@ -53,9 +62,6 @@ movies_dict = pickle.load(open('movies.pkl', 'rb'))
 
 # Pass only titles to the selectbox
 movie_titles = movies_dict['title'].values
-
-# Load the similarity pickle file
-similarity = pickle.load(open('similarity.pkl', 'rb'))
 
 # Movie selection
 Selected_Movie_name = st.selectbox(
