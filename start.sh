@@ -1,16 +1,12 @@
 #!/bin/bash
-# Log the download process
-echo "Starting the download of similarity.pkl"
-gdown --no-cookies https://drive.google.com/uc?id=1xLmlmFLb4Do-R77Twyk-tt4o3LAru7YJ -O similarity.pkl
-echo "Download completed."
+echo "Downloading similarity.pkl from Dropbox..."
+wget "https://www.dropbox.com/scl/fi/z4p5rj7p21kucbxqy1l8p/similarity.pkl?rlkey=3s6krcfdh6jtnzslag8mf2j56&st=5hzrlev9&dl=1" -O similarity.pkl
 
-# Check if the file exists
 if [ -f similarity.pkl ]; then
-    echo "similarity.pkl file downloaded successfully."
+    echo "Download successful."
 else
-    echo "similarity.pkl download failed."
+    echo "Download failed."
     exit 1
 fi
 
-# Start the Streamlit app
 streamlit run app.py
