@@ -1,7 +1,6 @@
 import streamlit as st
 import pickle
 import requests
-from pyarrow.compute import index  # Ensure you need this import, as it's not used in the code below
 
 # Page branding
 st.set_page_config(
@@ -15,12 +14,18 @@ st.title("Smart Movie Recommender 🤖💡")
 
 def fetch_poster(movie_id):
     """Fetch movie poster from TMDB API"""
-    response = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key=3e7e2378273b45f83320fc8c16405bfa&language=en-US")
-    data = response.json()
-    return f"http://image.tmdb.org/t/p/w500/{data['poster_path']}"
+    try:
+        response = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key=3e7e2378273b45f83320fc8c16405bfa&language=en-US")
+        data = response.json()
+        return f"http://image.tmdb.org/t/p/w500/{data['poster_path']}"
+    except:
+        return "https://via.placeholder.com/220x330.png?text=No+Image"  # Placeholder image if failed to fetch
 
 def recommend(movie):
     """Function that recommends top 5 movies"""
+    if movie not in movies_dict['title'].values:
+        return [], []  # If the movie is not in the list, return empty lists
+    
     movie_index = movies_dict[movies_dict['title'] == movie].index[0]
     distance = similarity[movie_index]
     movies_list = sorted(list(enumerate(distance)), reverse=True, key=lambda x: x[1])[1:6]
