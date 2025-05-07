@@ -54,7 +54,7 @@ except FileNotFoundError:
     st.error("The similarity file could not be loaded. Please try again later.")
     similarity = None  # Prevent further errors if similarity is not loaded
 
-if similarity:  # Ensure the similarity matrix is loaded before proceeding
+if similarity is not None and similarity.size > 0:  # Ensure the similarity matrix is loaded before proceeding
     Selected_Movie_name = st.selectbox(
         "🍿 Pick a Movie",
         [""] + movie_titles,
